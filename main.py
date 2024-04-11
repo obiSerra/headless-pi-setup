@@ -6,8 +6,6 @@ import os
 import subprocess
 from pathlib import Path
 
-from jinja2 import Template
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A simpe provisioning tool PIes")
 
@@ -39,12 +37,21 @@ if __name__ == "__main__":
 
     # Create the wpa_supplicant.conf file
     print("[+] Creating wpa_supplicant.conf file...")
-    with open("wpa_supplicant.jinja") as file_:
-        template = Template(file_.read())
+
+    wpa_template = f"""
+country={config['country']}
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={{
+    ssid="{config['ssid']}"
+    psk="{config['psk']}"
+}}
+"""
 
     wpa_file = os.path.join(VOLUME_PATH, "wpa_supplicant.conf")
     with open(wpa_file, "w") as file:
-        file.write(template.render(config))
+        file.write(wpa_template)
 
     print("\n\n----------------------- Check -----------------------\n")
     print("[?] ssh")
