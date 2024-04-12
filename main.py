@@ -38,14 +38,14 @@ if __name__ == "__main__":
     # Create the wpa_supplicant.conf file
     print("[+] Creating wpa_supplicant.conf file...")
 
-    wpa_template = f"""
-country={config['country']}
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+    wpa_template = f"""ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
+country={config['country']}
 
 network={{
     ssid="{config['ssid']}"
     psk="{config['psk']}"
+    key_mgmt=WPA-PSK
 }}
 """
 
